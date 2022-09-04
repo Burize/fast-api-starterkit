@@ -1,0 +1,18 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+fastapi = "==0.81.0"
+uvicorn = {extras = ["standard"], version = "==0.18.3"}
+sqlalchemy = "~=1.4"
+fastapi-sqlalchemy = "*"
+alembic = "*"
+psycopg2-binary = "*"
+passlib = {extras = ["bcrypt"], version = "*"}
+
+[requires]
+python_version = "3.9"
