@@ -13,6 +13,8 @@ fastapi-sqlalchemy = "*"
 alembic = "*"
 psycopg2-binary = "*"
 passlib = {extras = ["bcrypt"], version = "*"}
+redis = "*"
+aioredis = "*"
 
 [requires]
 python_version = "3.9"
