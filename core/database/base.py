@@ -2,8 +2,7 @@ from typing import Type
 
 from fastapi_sqlalchemy import db
 from sqlalchemy import MetaData
-from sqlalchemy.orm import DeclarativeMeta
-from sqlalchemy.orm import Query
+from sqlalchemy.orm import class_mapper
 from sqlalchemy.orm import declarative_base
 
 meta = MetaData(
@@ -17,10 +16,14 @@ meta = MetaData(
 )
 
 
+class QueryProperty(object):
+    def __get__(self, instance, owner):
+        mapper = class_mapper(owner)
+        return db.session.query(mapper)
+
+
 class Model:
-    @staticmethod
-    def query() -> Query:
-        return db.session.query_property(query_cls=Query)
+    query = QueryProperty()
 
 
 Base: Type[Model] = declarative_base(metadata=meta, cls=Model)

@@ -6,8 +6,8 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-fastapi = "==0.81.0"
-uvicorn = {extras = ["standard"], version = "==0.18.3"}
+fastapi = "==0.102.0"
+uvicorn = {extras = ["standard"], version = "==0.23.2"}
 sqlalchemy = "~=1.4"
 fastapi-sqlalchemy = "*"
 alembic = "*"

@@ -9,7 +9,7 @@ app = FastAPI(
     title='starter', docs_url=f"{settings.API_PREFIX}/docs"
 )
 
-app.add_middleware(DBSessionMiddleware, db_url=settings.DATABASE_URL)
+app.add_middleware(DBSessionMiddleware, db_url=settings.DATABASE_URL, commit_on_exit=True)
 
 root_router = APIRouter()
 root_router.include_router(auth_router)

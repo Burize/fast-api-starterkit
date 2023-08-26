@@ -23,7 +23,7 @@ class UserDTO:
     email: str
 
 
-@router.post('/authenticate')
+@router.post('')
 @exception_to_response(AuthenticateException, http_code=401)
 def authenticate(dto: UserAuthenticateDTO, auth_service: AuthService = Depends()):
     user = auth_service.authenticate(username=dto.username, password=dto.password)
