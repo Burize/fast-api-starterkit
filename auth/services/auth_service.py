@@ -1,12 +1,13 @@
-from fastapi import Depends
 from passlib.context import CryptContext
 
 from auth.models import User
 from auth.repositories.user_repository import UserRepository
 from core.exceptions import CustomException
 from core.exceptions import NotFoundException
+from core.inject import inject
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 
 class AuthenticateException(CustomException):
@@ -14,7 +15,8 @@ class AuthenticateException(CustomException):
 
 
 class AuthService:
-    def __init__(self, user_repository: UserRepository = Depends()):
+    @inject
+    def __init__(self, user_repository: UserRepository):
         self._user_repository = user_repository
 
     def authenticate(self, username: str, password: str) -> User:

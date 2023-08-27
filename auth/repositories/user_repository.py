@@ -1,4 +1,3 @@
-from fastapi import Depends
 from fastapi_sqlalchemy import db
 
 from auth.models import User
