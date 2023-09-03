@@ -1,3 +1,4 @@
+import core.settings # noqa
 from fastapi import APIRouter
 from fastapi import FastAPI
 from fastapi_sqlalchemy import DBSessionMiddleware

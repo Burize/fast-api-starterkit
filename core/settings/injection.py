@@ -1,0 +1,5 @@
+from core.inject.dependency_container import DependencyContainer
+from core.session_storage import SessionStorage
+from core.session_storage.get_session_storage import get_session_storage
+
+DependencyContainer.add(SessionStorage, get_session_storage)

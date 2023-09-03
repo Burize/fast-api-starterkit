@@ -6,10 +6,12 @@ from fastapi import Depends
 from core.storages import RedisStorage
 from .session_storage import SessionId
 from .session_storage import SessionStorage
+from ..inject import inject
 
 
 class RedisSessionStorage(SessionStorage):
-    def __init__(self, redis_storage: RedisStorage = Depends()):
+    @inject
+    def __init__(self, redis_storage: RedisStorage):
         self._redis_storage = redis_storage
 
     async def create_session(self, data: dict) -> SessionId:

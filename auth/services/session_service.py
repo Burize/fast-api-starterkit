@@ -2,11 +2,9 @@ from dataclasses import asdict
 from dataclasses import dataclass
 from uuid import UUID
 
-from fastapi import Depends
-
-from auth.services.session_storage import get_session_storage
 from auth.services.session_storage import SessionId
 from auth.services.session_storage import SessionStorage
+from core.inject import inject
 
 
 @dataclass
@@ -15,7 +13,8 @@ class UserSession:
 
 
 class SessionService:
-    def __init__(self, session_storage: SessionStorage = Depends(get_session_storage)):
+    @inject
+    def __init__(self, session_storage: SessionStorage):
         self._session_storage = session_storage
 
     async def create_session(self, user_session: UserSession) -> SessionId:
