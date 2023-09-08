@@ -1,14 +1,11 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from fastapi import APIRouter
-from fastapi import Depends
-
 from auth.models import User
 from auth.repositories.user_repository import UserRepository
+from core.api import APIRouter
 from core.api import controller
 from core.dependencies import UserId
-from core.dependencies.authoroized import authorized
 from core.inject import inject
 
 router = APIRouter()
@@ -36,14 +33,14 @@ class UserController:
         self._user_repository = user_repository
         self._user_id = user_id
 
-    @router.post('')
+    @router.post('', no_authetication=True)
     def create(self, dto: CreateUserDTO) -> UserDTO:
         user = User(username=dto.username, password=dto.password, email=dto.email)
         self._user_repository.save(user)
 
         return UserDTO(id=user.id, email=user.email, username=user.username)
 
-    @router.get('/my', dependencies=[Depends(authorized)])
+    @router.get('/my')
     def get(self) -> UserDTO:
         user = self._user_repository.get(self._user_id)
         return UserDTO(id=user.id, email=user.email, username=user.username)
