@@ -1,7 +1,7 @@
 from fastapi import APIRouter as FastAPIRouter
 from fastapi import Depends
 
-from core.dependencies.authoroized import authorized
+from core.dependencies import authorized
 
 
 class APIRouter(FastAPIRouter):

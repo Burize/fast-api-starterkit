@@ -11,8 +11,8 @@ from core.session import get_session_storage
 
 def authorized(
     session_storage: Annotated[SessionStorage, Depends(get_session_storage)],
-    session_id: Annotated[Optional[str], Cookie()],
     request: Request,
+    session_id: Annotated[Optional[str], Cookie()] = None,
 ):
     if not session_id:
         raise NotAuthorizedException()

@@ -1,9 +1,11 @@
 from typing import Optional
 from uuid import UUID
+import core.settings as settings
 
 from core.storages import RedisStorage
 from .session_storage import SessionStorage
 from ..inject import inject
+
 
 
 class RedisSessionStorage(SessionStorage):
@@ -13,7 +15,10 @@ class RedisSessionStorage(SessionStorage):
 
     def create_session(self, user_id: UUID, session_id: str):
         self._redis_storage.set(f'user:{user_id.hex}', session_id)
-        self._redis_storage.set(f'session:{session_id}', user_id.hex)
+        self._redis_storage.set(f'session:{session_id}', user_id.hex, expire=settings.USER_SESSION_MAX_AGE)
+
+    def prolong_session(self, session_id: str):
+        self._redis_storage.expire(f'session:{session_id}', expire=settings.USER_SESSION_MAX_AGE)
 
     def get_user_id(self, session_id: str) -> Optional[UUID]:
         user_id =  self._redis_storage.get(f'session:{session_id}')

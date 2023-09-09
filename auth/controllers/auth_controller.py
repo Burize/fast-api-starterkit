@@ -8,7 +8,6 @@ from auth.services.auth_service import AuthenticateException
 from core.api import APIRouter
 from core.api import controller
 from core.dependencies import UserId
-from core.dependencies.authoroized import authorized
 from core.exceptions import exception_to_response
 from core.inject import inject
 

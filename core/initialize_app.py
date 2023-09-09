@@ -13,7 +13,7 @@ from core.exceptions.exception_handlers import not_authorized_exception_handler
 
 def init_app(app: FastAPI):
     app.add_middleware(DBSessionMiddleware, db_url=settings.DATABASE_URL, commit_on_exit=True)
-
+    app
     app.add_exception_handler(NotFoundException, not_found_exception_handler)
     app.add_exception_handler(NotAuthorizedException, not_authorized_exception_handler)
 

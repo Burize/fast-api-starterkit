@@ -12,6 +12,10 @@ class SessionStorage(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def prolong_session(self, session_id: str):
+        pass
+
+    @abstractmethod
     def get_user_active_session_id(self, user_id: UUID) -> Optional[str]:
         pass
 
