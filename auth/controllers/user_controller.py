@@ -11,7 +11,6 @@ from core.inject import inject
 router = APIRouter()
 
 
-
 @dataclass
 class CreateUserDTO:
     username: str
@@ -34,13 +33,13 @@ class UserController:
         self._user_id = user_id
 
     @router.post('', no_authetication=True)
-    def create(self, dto: CreateUserDTO) -> UserDTO:
+    async def create(self, dto: CreateUserDTO) -> UserDTO:
         user = User(username=dto.username, password=dto.password, email=dto.email)
-        self._user_repository.save(user)
+        await self._user_repository.save(user)
 
         return UserDTO(id=user.id, email=user.email, username=user.username)
 
     @router.get('/my')
-    def get(self) -> UserDTO:
-        user = self._user_repository.get(self._user_id)
+    async def get(self) -> UserDTO:
+        user = await self._user_repository.get(self._user_id)
         return UserDTO(id=user.id, email=user.email, username=user.username)

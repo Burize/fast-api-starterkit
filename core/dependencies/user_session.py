@@ -4,7 +4,7 @@ from fastapi import  Cookie
 from fastapi import  Response
 from fastapi import  Depends
 
-import core.settings as settings
+from core import settings
 from core.session import SessionStorage
 from core.session import get_session_storage
 

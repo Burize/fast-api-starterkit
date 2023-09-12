@@ -1,6 +1,6 @@
 from fastapi import Depends
 from fastapi import FastAPI
-import core.settings as settings
+from core import settings
 from core.dependencies import prolong_session
 from core.initialize_app import init_app
 

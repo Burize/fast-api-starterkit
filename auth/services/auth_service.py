@@ -1,6 +1,6 @@
 from uuid import UUID
 from fastapi import Response
-import core.settings as settings
+from core import settings
 from passlib.context import CryptContext
 
 from auth.models import User
@@ -28,9 +28,9 @@ class AuthService:
         self._user_repository = user_repository
         self._session_storage = session_storage
 
-    def authenticate(self, response: Response, username: str, password: str) -> User:
+    async def authenticate(self, response: Response, username: str, password: str) -> User:
         try:
-            user = self._user_repository.get_user_by_username(username)
+            user = await self._user_repository.get_user_by_username(username)
         except NotFoundException:
             raise AuthenticateException('username or password is invalid')
 
@@ -47,7 +47,7 @@ class AuthService:
 
         return user
 
-    def logout(self, user_id: UUID, response: Response):
+    async def logout(self, user_id: UUID, response: Response):
         self._session_storage.delete_session(user_id=user_id)
         response.set_cookie(key=settings.USER_SESSION_NAME, max_age=-1)
 

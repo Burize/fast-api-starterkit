@@ -32,7 +32,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    db_url = os.getenv('DATABASE_URL')
+    db_url = os.getenv('DATABASE_URL', '').replace('+asyncpg', '')
 
     engine = create_engine(db_url)
     with engine.connect() as connection:

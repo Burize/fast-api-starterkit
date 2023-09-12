@@ -1,6 +1,6 @@
 from typing import Optional
 from uuid import UUID
-import core.settings as settings
+from core import settings
 
 from core.storages import RedisStorage
 from .session_storage import SessionStorage

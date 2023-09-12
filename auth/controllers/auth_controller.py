@@ -35,10 +35,10 @@ class AuthController:
 
     @router.post('/login', no_authetication=True)
     @exception_to_response(AuthenticateException, http_code=401)
-    def authenticate(self, response: Response, dto: UserAuthenticateDTO) -> UserDTO:
-        user = self._auth_service.authenticate(username=dto.username, password=dto.password, response=response)
+    async def authenticate(self, response: Response, dto: UserAuthenticateDTO) -> UserDTO:
+        user = await self._auth_service.authenticate(username=dto.username, password=dto.password, response=response)
         return UserDTO(id=user.id, email=user.email)
 
     @router.post('/logout')
-    def logout(self, response: Response):
-        self._auth_service.logout(user_id=self._user_id, response=response)
+    async def logout(self, response: Response):
+        await self._auth_service.logout(user_id=self._user_id, response=response)
