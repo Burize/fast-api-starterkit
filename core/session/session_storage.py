@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from abc import ABCMeta
 from abc import abstractmethod
 from typing import Optional

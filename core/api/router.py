@@ -1,7 +1,7 @@
 from fastapi import APIRouter as FastAPIRouter
 from fastapi import Depends
 
-from core.dependencies import authorized
+from core.dependencies import authorize
 
 
 class APIRouter(FastAPIRouter):
@@ -45,7 +45,7 @@ class APIRouter(FastAPIRouter):
         no_authetication: bool = False,
         **kwargs,
     ):
-        auth_dependencies = [] if no_authetication else [Depends(authorized)]
+        auth_dependencies = [] if no_authetication else [Depends(authorize)]
         args_dependencies = kwargs.pop('dependencies', [])
         dependencies = auth_dependencies + args_dependencies
-        return getattr(super(),method)(path=path, dependencies=dependencies, **kwargs)
+        return getattr(super(), method)(path=path, dependencies=dependencies, **kwargs)

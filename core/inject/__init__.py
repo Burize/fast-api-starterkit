@@ -1,1 +1,1 @@
-from .inject import inject
+from .injection import injector

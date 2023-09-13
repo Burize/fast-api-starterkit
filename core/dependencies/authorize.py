@@ -1,19 +1,19 @@
 from typing import Annotated
 from typing import Optional
-from fastapi import  Cookie
-from fastapi import  Request
-from fastapi import  Depends
+from fastapi import Cookie
+from fastapi import Request
 
 from core.exceptions import NotAuthorizedException
+from core.inject import injector
 from core.session import SessionStorage
-from core.session import get_session_storage
 
 
-async def authorized(
-    session_storage: Annotated[SessionStorage, Depends(get_session_storage)],
+async def authorize(
     request: Request,
     session_id: Annotated[Optional[str], Cookie()] = None,
 ):
+    session_storage = injector.get(SessionStorage)
+
     if not session_id:
         raise NotAuthorizedException()
 

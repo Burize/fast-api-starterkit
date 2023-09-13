@@ -1,10 +1,12 @@
 from typing import Optional
 from uuid import UUID
+
+from injector import inject
+
 from core import settings
 
 from core.storages import RedisStorage
 from .session_storage import SessionStorage
-from ..inject import inject
 
 
 class RedisSessionStorage(SessionStorage):

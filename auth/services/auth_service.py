@@ -1,5 +1,7 @@
 from uuid import UUID
 from fastapi import Response
+from injector import inject
+
 from core import settings
 from passlib.context import CryptContext
 
@@ -7,11 +9,9 @@ from auth.models import User
 from auth.repositories.user_repository import UserRepository
 from core.exceptions import CustomException
 from core.exceptions import NotFoundException
-from core.inject import inject
 from core.session import SessionStorage
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 
 class AuthenticateException(CustomException):
@@ -48,7 +48,7 @@ class AuthService:
 
     async def logout(self, user_id: UUID, response: Response):
         await self._session_storage.delete_session(user_id=user_id)
-        response.set_cookie(key=settings.USER_SESSION_NAME, max_age=-1)
+        response.set_cookie(key=settings.USER_SESSION_NAME, max_age=0, value='')
 
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
         return pwd_context.verify(plain_password, hashed_password)
