@@ -2,7 +2,7 @@ from typing import Optional
 from typing import Union
 from uuid import UUID
 
-import redis
+import redis.asyncio as redis
 
 
 RedisKey = Union[str, int, UUID]
@@ -13,14 +13,14 @@ class RedisStorage:
     def __init__(self):
         self._redis = redis.Redis(decode_responses=True)
 
-    def get(self, key: RedisKey) -> RedisValue:
-        return self._redis.get(key)
+    async def get(self, key: RedisKey) -> RedisValue:
+        return await self._redis.get(key)
 
-    def set(self, key: RedisKey, value: RedisValue, expire: Optional[int] = None):
-        self._redis.set(key, value, ex=expire)
+    async def set(self, key: RedisKey, value: RedisValue, expire: Optional[int] = None):
+        await self._redis.set(key, value, ex=expire)
 
-    def expire(self, key: RedisKey, expire: int):
-        self._redis.expire(key, expire)
+    async def expire(self, key: RedisKey, expire: int):
+        await self._redis.expire(key, expire)
 
-    def delete(self, key: RedisKey):
-        self._redis.delete(key)
+    async def delete(self, key: RedisKey):
+        await self._redis.delete(key)

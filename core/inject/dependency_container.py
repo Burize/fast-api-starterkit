@@ -8,10 +8,8 @@ from fastapi import Depends
 Provider = Union[Callable, object]
 
 
-
 class DependencyContainer:
     _configuration: Dict[Type, Provider] = dict()
-
 
     @classmethod
     def add(cls, dependency: Type, provider: Provider):

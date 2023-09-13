@@ -39,16 +39,15 @@ class AuthService:
         if not is_password_correct:
             raise AuthenticateException('username or password is invalid')
 
-
         session_id = pwd_context.hash(password)
-        self._session_storage.create_session(session_id=session_id, user_id=user.id)
+        await self._session_storage.create_session(session_id=session_id, user_id=user.id)
 
         response.set_cookie(key=settings.USER_SESSION_NAME, max_age=settings.USER_SESSION_MAX_AGE, value=session_id)
 
         return user
 
     async def logout(self, user_id: UUID, response: Response):
-        self._session_storage.delete_session(user_id=user_id)
+        await self._session_storage.delete_session(user_id=user_id)
         response.set_cookie(key=settings.USER_SESSION_NAME, max_age=-1)
 
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
