@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from http import HTTPStatus
 from uuid import UUID
 
 from injector import inject
@@ -32,7 +33,7 @@ class UserController:
     def __init__(self, user_repository: UserRepository):
         self._user_repository = user_repository
 
-    @router.post('', no_authetication=True)
+    @router.post('', no_authetication=True, status_code=HTTPStatus.CREATED)
     async def create(self, dto: CreateUserDTO) -> UserDTO:
         user = User(username=dto.username, password=dto.password, email=dto.email)
         await self._user_repository.save(user)

@@ -1,7 +1,5 @@
-from fastapi import Depends
-
-from .redis_session_storage import RedisSessionStorage
-from ..storages import RedisStorage
+from core.session.redis_session_storage import RedisSessionStorage
+from core.storages import RedisStorage
 
 
 def get_session_storage():

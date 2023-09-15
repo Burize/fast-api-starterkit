@@ -3,6 +3,8 @@ name = "fastapi-starterkit"
 url = "https://pypi.org/simple"
 
 [dev-packages]
+pytest = "==7.4.2"
+httpx = "==0.25.0"
 
 [packages]
 fastapi = "==0.102.0"

@@ -1,4 +1,10 @@
 from injector import Injector
-from core.inject.configuration import BaseConfiguration
 
-injector = Injector([BaseConfiguration()])
+from core import settings
+from core.inject.configuration import TestConfiguration
+from core.inject.configuration import Configuration
+
+
+configuration = TestConfiguration() if settings.IS_TEST else Configuration()
+
+injector = Injector([configuration])

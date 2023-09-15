@@ -8,7 +8,7 @@ from core.exceptions import NotAuthorizedException
 from auth.routes import api_router as auth_router
 from core.exceptions.exception_handlers import not_found_exception_handler
 from core.exceptions.exception_handlers import not_authorized_exception_handler
-from core.database import DBSessionMiddleware
+from core.middlewares import DBSessionMiddleware
 from core.middlewares import UserSessionMiddleware
 
 

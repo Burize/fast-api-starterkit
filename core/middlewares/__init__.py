@@ -1,1 +1,2 @@
 from .user_session_middleware import UserSessionMiddleware
+from .database_session_middleware import DBSessionMiddleware
