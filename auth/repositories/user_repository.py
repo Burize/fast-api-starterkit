@@ -1,3 +1,4 @@
+from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import select
@@ -27,3 +28,13 @@ class UserRepository:
         if not user:
             raise NotFoundException('User is not found')
         return user
+
+    async def find_user_by_username(self, username: str) -> Optional[User]:
+        query = select(User).filter(User.username.ilike(username))
+        result = await Session.scalars(query)
+        return result.one_or_none()
+
+    async def find_user_by_email(self, email: str) -> Optional[User]:
+        query = select(User).filter(User.email.ilike(email))
+        result = await Session.scalars(query)
+        return result.one_or_none()

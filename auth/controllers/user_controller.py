@@ -9,6 +9,7 @@ from auth.repositories.user_repository import UserRepository
 from core.api import APIRouter
 from core.api import controller
 from core.dependencies import get_user_id
+from core.exceptions import ConflictException
 
 router = APIRouter()
 
@@ -35,6 +36,14 @@ class UserController:
 
     @router.post('', no_authetication=True, status_code=HTTPStatus.CREATED)
     async def create(self, dto: CreateUserDTO) -> UserDTO:
+        user_with_same_email = self._user_repository.find_user_by_email(dto.email)
+        if user_with_same_email:
+            raise ConflictException('Email is already taken')
+
+        user_with_same_username = self._user_repository.find_user_by_email(dto.email)
+        if user_with_same_username:
+            raise ConflictException('Username is already taken')
+
         user = User(username=dto.username, password=dto.password, email=dto.email)
         await self._user_repository.save(user)
 

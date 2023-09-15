@@ -4,9 +4,13 @@ class CustomException(Exception):
         return self.args[0] if self.args else ''
 
 
-
 class NotFoundException(CustomException):
     pass
+
+
+class ConflictException(CustomException):
+    pass
+
 
 class NotAuthorizedException(CustomException):
     @property

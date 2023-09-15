@@ -1,34 +1,56 @@
 from http import HTTPStatus
 
+import pytest
 
-def test_create_user(api_client):
+from auth.models import User
+from auth.repositories.user_repository import UserRepository
+from core.inject import injector
 
+
+@pytest.mark.anyio
+async def test_create_user(api_client):
+    username = 'test'
+    email = 'test@email.com'
     data = {
-        'username': 'test',
+        'username': username,
         'password': '1234',
-        'email': 'test@email.com',
+        'email': email,
     }
 
-    response = api_client.post('api/user', json=data)
+    # Act
+    async with api_client:
+        response = await api_client.post('api/user', json=data)
 
+    # Assert
     assert response.status_code == HTTPStatus.CREATED
     result = response.json()
 
     assert result['username'] == data['username']
     assert result['email'] == data['email']
 
+    user_repository = injector.get(UserRepository)
 
-def test_create_user_error_if_email_already_taken(api_client):
+    created_user = await user_repository.get_user_by_username(username)
+    assert created_user.email == email
+
+
+@pytest.mark.anyio
+async def test_create_user_error_if_email_already_taken(api_client):
+    email = 'already_taken@email.com'
+    user = User(username='username', password='1234', email=email)
+    user_repository = injector.get(UserRepository)
+    user_repository.save(user)
+
     data = {
         'username': 'test',
         'password': '1234',
-        'email': 'test@email.com',
+        'email': email,
     }
 
-    response = api_client.post('api/user', json=data)
+    # Act
+    async with api_client:
+        response = await api_client.post('api/user', json=data)
 
-    assert response.status_code == HTTPStatus.CREATED
-    result = response.json()
-
-    assert result['username'] == data['username']
-    assert result['email'] == data['email']
+    # Assert
+    assert response.status_code == HTTPStatus.CONFLICT
+    assert response.json() == {'message': 'Email is already taken'}
