@@ -3,7 +3,7 @@ from http import HTTPStatus
 import pytest
 
 from auth.models import User
-from auth.repositories.user_repository import UserRepository
+from auth.repositories import UserRepository
 from core.inject import injector
 
 
@@ -39,7 +39,7 @@ async def test_create_user_error_if_email_already_taken(api_client):
     email = 'already_taken@email.com'
     user = User(username='username', password='1234', email=email)
     user_repository = injector.get(UserRepository)
-    user_repository.save(user)
+    await user_repository.save(user)
 
     data = {
         'username': 'test',

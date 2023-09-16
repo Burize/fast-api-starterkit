@@ -1,8 +1,9 @@
 from sqlalchemy import MetaData
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.ext.asyncio import AsyncAttrs
+from sqlalchemy.orm import DeclarativeBase
 
 
-meta = MetaData(
+metadata = MetaData(
     naming_convention={
         'ix': 'ix_%(column_0_label)s',
         'uq': 'uq_%(table_name)s_%(column_0_name)s',
@@ -12,4 +13,6 @@ meta = MetaData(
     }
 )
 
-Base= declarative_base(metadata=meta)
+
+class Base(AsyncAttrs, DeclarativeBase):
+    metadata = metadata

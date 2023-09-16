@@ -6,7 +6,7 @@ from core import settings
 from passlib.context import CryptContext
 
 from auth.models import User
-from auth.repositories.user_repository import UserRepository
+from auth.repositories import UserRepository
 from core.exceptions import CustomException
 from core.exceptions import NotFoundException
 from core.session import SessionStorage
@@ -32,12 +32,12 @@ class AuthService:
         try:
             user = await self._user_repository.get_user_by_username(username)
         except NotFoundException:
-            raise AuthenticateException('username or password is invalid')
+            raise AuthenticateException('Username or password is invalid')
 
         is_password_correct = self.verify_password(password, user.password)
 
         if not is_password_correct:
-            raise AuthenticateException('username or password is invalid')
+            raise AuthenticateException('Username or password is invalid')
 
         session_id = pwd_context.hash(password)
         await self._session_storage.create_session(session_id=session_id, user_id=user.id)

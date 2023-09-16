@@ -22,3 +22,5 @@ class TestConfiguration(BaseConfiguration):
     def configure(self, binder):
         super().configure(binder)
         binder.bind(Engine, to=CallableProvider(get_database_engine))
+        binder.bind(SessionStorage, to=CallableProvider(get_session_storage))
+
