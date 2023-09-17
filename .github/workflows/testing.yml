@@ -1,0 +1,74 @@
+name: Testng
+
+on: pull_request
+
+
+jobs:
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql+asyncpg://fastapi_starterkit_user:1234@localhost/fastapi_starterkit
+      ENVIRONMENT: test
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run containers
+        shell: bash
+        run: |
+          cp ./.env.example ./.env
+          docker compose up -d redis db
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          pip3 install pipenv
+          pipenv run pip install pip==20.3.3
+          pipenv install --dev --system
+      - name: Run migrations
+        run: alembic upgrade heads
+      - name: Run tests
+        run: pytest
+
+  e2e-tests:
+    name: E2E tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run containers
+        shell: bash
+        run: |
+          cp ./.env.example ./.env
+          docker compose up -d redis db backend
+      - name: Run migrations
+        run: docker exec -t backend-fast-api alembic upgrade heads
+      - name: Set up node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install npm dependencies
+        run: |
+          cd e2e_tests
+          npm i
+      - name: Generate API client
+        run: |
+          cd e2e_tests
+          npm run generate-client
+      - name: Run tests
+        run: |
+          cd e2e_tests
+          npm test
+      - name: API logs
+        run: |
+          docker compose logs backend
