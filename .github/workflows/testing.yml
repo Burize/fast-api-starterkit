@@ -54,7 +54,7 @@ jobs:
           cp ./.env.example ./.env
           docker-compose up -d redis db backend
       - name: Run migrations
-        run: docker exec -it backend-fast-api alembic upgrade heads
+        run: docker exec -t backend-fast-api alembic upgrade heads
       - name: Set up node
         uses: actions/setup-node@v3
         with:
