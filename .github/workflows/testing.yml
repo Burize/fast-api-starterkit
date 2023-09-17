@@ -1,0 +1,37 @@
+name: Testng
+
+on: pull_request
+
+
+jobs:
+  tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql+asyncpg://fastapi_starterkit_user:1234@localhost/fastapi_starterkit
+      ENVIRONMENT: test
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run containers
+        shell: bash
+        run: |
+          cp ./.env.example ./.env
+          docker-compose up -d redis db
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          pip3 install pipenv
+          pipenv run pip install pip==20.3.3
+          pipenv install --dev --system
+      - name: Run migrations
+        run: alembic upgrade heads
+      - name: Run tests
+        run: pytest
