@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready", "-q", "-d", "fastapi_starterkit123", "-U", "fastapi_starterkit_user123" ]
+      test: [ "CMD-SHELL", "pg_isready", "-q", "-d", "fastapi_starterkit", "-U", "fastapi_starterkit_user" ]
       interval: 5s
       timeout: 5s
       retries: 5
