@@ -62,6 +62,10 @@ jobs:
           cd e2e_tests
           npm i
       - name: Generate API client
-        run: npm run generate-client
+        run: |
+          cd e2e_tests
+          npm run generate-client
       - name: Run tests
-        run: npm test
+        run: |
+          cd e2e_tests
+          npm test
