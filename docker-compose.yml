@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres:14.1-alpine
+    container_name: db-fast-api
     environment:
       - POSTGRES_DB=fastapi_starterkit
       - POSTGRES_USER=fastapi_starterkit_user
@@ -22,6 +23,25 @@ services:
     ports:
       - "6379:6379"
     command: redis-server
+
+  backend:
+    container_name: backend-fast-api
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://fastapi_starterkit_user:1234@db-fast-api/fastapi_starterkit
+      - REDIS_HOST=redis-fast-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/srv
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8000:8000"
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 volumes:
   pg-data:

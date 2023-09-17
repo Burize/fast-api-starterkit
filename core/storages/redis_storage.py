@@ -4,6 +4,7 @@ from uuid import UUID
 
 import redis.asyncio as redis
 
+from core import settings
 
 RedisKey = Union[str, int, UUID]
 RedisValue = Union[dict, set, str, UUID, int]
@@ -11,7 +12,7 @@ RedisValue = Union[dict, set, str, UUID, int]
 
 class RedisStorage:
     def __init__(self):
-        self._redis = redis.Redis(decode_responses=True)
+        self._redis = redis.Redis(decode_responses=True, host=settings.REDIS_HOST)
 
     async def get(self, key: RedisKey) -> RedisValue:
         return await self._redis.get(key)
