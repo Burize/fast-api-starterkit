@@ -69,3 +69,6 @@ jobs:
         run: |
           cd e2e_tests
           npm test
+      - name: API logs
+        run: |
+          docker compose logs backend
